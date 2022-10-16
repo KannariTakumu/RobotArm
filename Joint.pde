@@ -1,11 +1,11 @@
 public class Joint{
-  private int xp, yp;
+  private float xp, yp;
   private int size;
   private int[] joint_color;
   private int[] branch_color;
   private Joint next;
  
-  public Joint(int xp_arg, int yp_arg, int size_arg, int[] joint_color_arg, int[] branch_color_arg, Joint next_arg){
+  public Joint(float xp_arg, float yp_arg, int size_arg, int[] joint_color_arg, int[] branch_color_arg, Joint next_arg){
     xp = xp_arg;
     yp = yp_arg;
     size = size_arg;
@@ -30,12 +30,12 @@ public class Joint{
   }
   
   //X座標取得
-  public int Xp(){
+  public float Xp(){
     return xp;
   }
   
   //Y座標取得
-  public int Yp(){
+  public float Yp(){
     return yp;
   }
   
