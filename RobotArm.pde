@@ -14,20 +14,18 @@ void setup() {
   background(background_color);
 
   
-  //関節
+  //Arm 値設定
+  float shoulder_branch_length = 200.0;
+  float elbow_branch_length = 200.0;
+  int joint_size = 40;
   int[] joint_color = {0, 0, 240};
   int[] branch_color = {0, 0, 0};
-  int joint_size = 40;
   
-  //関節オブジェクト作成
-  Joint hand = new Joint(150, 150, joint_size, joint_color, branch_color, null);
-  Joint elbow = new Joint(100, 100, joint_size, joint_color, branch_color, hand);
-  Joint shoulder = new Joint(50, 50, joint_size, joint_color, branch_color, elbow);
+  //Armオブジェクト作成
+  Arm robot_arm = new Arm(shoulder_branch_length, elbow_branch_length, joint_size, joint_color, branch_color);
   
   //描画
-  shoulder.Show();
-  elbow.Show();
-  hand.Show();
+  robot_arm.Show();
 }
 
 void draw() {
