@@ -11,6 +11,7 @@ public class Arm {
   private float shoulder_angle;
   private float elbow_angle;
   private float[] shoulder_pos;
+  private float[] target_pos;
 
 
   Arm(float shoulder_branch_length_arg, float elbow_branch_length_arg, int joint_size_arg, int[] joint_color_arg, int[] branch_color_arg) {
@@ -28,6 +29,7 @@ public class Arm {
     hand = new Joint(AngleToPosHand()[0], AngleToPosHand()[1], joint_size, joint_color, branch_color, null);
     elbow = new Joint(AngleToPosElbow()[0], AngleToPosElbow()[1], joint_size, joint_color, branch_color, hand);
     shoulder = new Joint(shoulder_pos[0], shoulder_pos[1], joint_size, joint_color, branch_color, elbow);
+    target_pos = hand.Pos();
   }
   
   //描画

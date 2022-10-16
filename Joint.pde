@@ -20,7 +20,7 @@ public class Joint{
     if (next != null){
       stroke(branch_color[0], branch_color[1], branch_color[2]);
       strokeWeight(5);
-      line(xp, yp, next.Xp(), next.Yp());
+      line(xp, yp, next.Pos()[0], next.Pos()[1]);
       strokeWeight(0);
     }
     
@@ -29,14 +29,9 @@ public class Joint{
     ellipse(xp, yp, size, size);  
   }
   
-  //X座標取得
-  public float Xp(){
-    return xp;
-  }
-  
-  //Y座標取得
-  public float Yp(){
-    return yp;
+  //座標取得
+  public float[] Pos(){
+    return new float[] {xp, yp};
   }
   
   //座標更新
