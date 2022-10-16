@@ -16,13 +16,13 @@ void setup() {
   
   //関節
   int[] joint_color = {0, 0, 240};
-  int[] arm_color = {0, 0, 0};
+  int[] branch_color = {0, 0, 0};
   int joint_size = 40;
   
   //関節オブジェクト作成
-  Joint hand = new Joint(150, 150, joint_size, joint_color, arm_color, null);
-  Joint elbow = new Joint(100, 100, joint_size, joint_color, arm_color, hand);
-  Joint shoulder = new Joint(50, 50, joint_size, joint_color, arm_color, elbow);
+  Joint hand = new Joint(150, 150, joint_size, joint_color, branch_color, null);
+  Joint elbow = new Joint(100, 100, joint_size, joint_color, branch_color, hand);
+  Joint shoulder = new Joint(50, 50, joint_size, joint_color, branch_color, elbow);
   
   //描画
   shoulder.Show();
