@@ -55,9 +55,40 @@ public class Arm {
     return pos;
   }
   
+  //位置更新
+  private void UpdatePosition(){
+    hand = new Joint(AngleToPosHand()[0], AngleToPosHand()[1], joint_size, joint_color, branch_color, null);
+    elbow = new Joint(AngleToPosElbow()[0], AngleToPosElbow()[1], joint_size, joint_color, branch_color, hand);
+    shoulder = new Joint(shoulder_pos[0], shoulder_pos[1], joint_size, joint_color, branch_color, elbow);
+    Show();
+  }
+  
   //座標から角度（未完成）
-  private float[] PosToAngle() {
-    float[] angle = new float[2];
-    return angle;
+  private void PosToAngle() {
+  }
+  
+  //target_posに代入
+  public void TargetPos(float[] pos){
+    target_pos = pos;
+  }
+  
+  //target_posを取得
+  public float[] TargetPos(){
+    return target_pos;
+  }
+  
+  //joint_color取得
+  public int[] JointColor(){
+    return joint_color;
+  }
+  
+  //branch_color取得
+  public int[] BranchColor(){
+    return branch_color;
+  }
+  
+  //joint_size取得
+  public int JointSize(){
+    return joint_size;
   }
 }

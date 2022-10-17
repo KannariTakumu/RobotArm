@@ -1,3 +1,5 @@
+Arm robot_arm;
+
 void settings(){
    //スクリーン
   int screen_height = 500;
@@ -22,11 +24,16 @@ void setup() {
   int[] branch_color = {0, 0, 0};
   
   //Armオブジェクト作成
-  Arm robot_arm = new Arm(shoulder_branch_length, elbow_branch_length, joint_size, joint_color, branch_color);
+  robot_arm = new Arm(shoulder_branch_length, elbow_branch_length, joint_size, joint_color, branch_color);
   
   //描画
   robot_arm.Show();
 }
 
 void draw() {
+  
+}
+
+void mousePressed(){
+  robot_arm.TargetPos(new float[]{mouseX,mouseY}); 
 }
