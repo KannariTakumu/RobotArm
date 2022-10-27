@@ -40,6 +40,10 @@ public class Arm {
     elbow.Show();
     hand.Show();
   }
+  
+  //マウスで座標を指定できる範囲を描画
+  private void MouseRangeShow(){
+  }
 
   //Elbow 角度から座標
   private float[] AngleToPosElbow() {
