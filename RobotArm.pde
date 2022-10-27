@@ -24,7 +24,7 @@ void setup() {
   int[] branch_color = {0, 0, 0};
   
   //Armオブジェクト作成
-  robot_arm = new Arm(shoulder_branch_length, elbow_branch_length, joint_size, joint_color, branch_color);
+  robot_arm = new Arm(shoulder_branch_length, elbow_branch_length, joint_size, joint_color, branch_color, background_color);
   
   //描画
   robot_arm.Show();
@@ -35,5 +35,6 @@ void draw() {
 }
 
 void mousePressed(){
-  robot_arm.TargetPos(new float[]{mouseX,mouseY}); 
+  robot_arm.TargetPos(new float[]{mouseX,mouseY});
+  robot_arm.UpdatePosition();
 }
