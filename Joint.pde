@@ -21,7 +21,7 @@ public class Joint{
       stroke(branch_color[0], branch_color[1], branch_color[2]);
       strokeWeight(5);
       line(xp, yp, next.Pos()[0], next.Pos()[1]);
-      strokeWeight(0);
+      strokeWeight(1);
     }
     
     //関節の描画
