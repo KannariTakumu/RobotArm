@@ -47,6 +47,18 @@ public class Arm {
     noFill();
     ellipse(shoulder_pos[0], shoulder_pos[1], 2*(shoulder_branch_length + elbow_branch_length), 2*(shoulder_branch_length + elbow_branch_length));
   }
+  
+  //座標指定バリデーション
+  private boolean ValidTarget(){
+    float x_distance = target_pos[0] - shoulder_pos[0];
+    float y_distance = target_pos[1] - shoulder_pos[1];
+    float distance = sqrt(x_distance * x_distance + y_distance * y_distance);
+    float range = (shoulder_branch_length + elbow_branch_length);
+    if (distance > range){
+      return false;
+    }
+    return true;
+  }
 
   //Elbow 角度から座標
   private float[] AngleToPosElbow() {
@@ -66,9 +78,6 @@ public class Arm {
 
   //位置更新
   public void UpdatePosition() {
-    //画面リセット
-    background(background_color);
-
     //角度更新
     PosToAngle();
 
@@ -76,7 +85,10 @@ public class Arm {
     hand = new Joint(AngleToPosHand()[0], AngleToPosHand()[1], joint_size, joint_color, branch_color, null);
     elbow = new Joint(AngleToPosElbow()[0], AngleToPosElbow()[1], joint_size, joint_color, branch_color, hand);
     shoulder = new Joint(shoulder_pos[0], shoulder_pos[1], joint_size, joint_color, branch_color, elbow);
-
+    
+    //画面リセット
+    background(background_color);
+    
     //表示
     Show();
     text(target_pos[0] + " , " + (shoulder_pos[1] - target_pos[1]), 250, 200);
@@ -102,14 +114,16 @@ public class Arm {
         temp_angle = -PI + temp_angle;
       }
     }
-
-    text(temp_angle * 180.0 / PI + ", " + shoulder_angle * 180.0 / PI, 250, 150);
     elbow_angle = temp_angle - shoulder_angle;
   }
 
   //target_posに代入
   public void TargetPos(float[] pos) {
+    float[] buf_target = target_pos;
     target_pos = pos;
+    if (!ValidTarget()){
+      target_pos = buf_target;
+    }
   }
 
   //target_posを取得
