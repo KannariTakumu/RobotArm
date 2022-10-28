@@ -31,7 +31,7 @@ void setup() {
 }
 
 void draw() {
-  
+  //直線的に目標まで移動
 }
 
 void mousePressed(){
