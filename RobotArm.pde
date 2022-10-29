@@ -36,5 +36,5 @@ void draw() {
 
 void mousePressed(){
   robot_arm.TargetPos(new float[]{mouseX,mouseY});
-  robot_arm.UpdatePosition();
+  //robot_arm.UpdatePosition();
 }

@@ -13,6 +13,8 @@ public class Arm {
   private float elbow_angle;
   private float[] shoulder_pos;
   private float[] target_pos;
+  private int orbit_step;
+  private float[][] orbit_pos;
 
 
   Arm(float shoulder_branch_length_arg, float elbow_branch_length_arg, int joint_size_arg, int[] joint_color_arg, int[] branch_color_arg, int background_color_arg) {
@@ -32,6 +34,8 @@ public class Arm {
     elbow = new Joint(AngleToPosElbow()[0], AngleToPosElbow()[1], joint_size, joint_color, branch_color, hand);
     shoulder = new Joint(shoulder_pos[0], shoulder_pos[1], joint_size, joint_color, branch_color, elbow);
     target_pos = hand.Pos();
+    orbit_step = 10;
+    orbit_pos = new float[orbit_step][2];
   }
 
   //描画
@@ -91,8 +95,6 @@ public class Arm {
     
     //表示
     Show();
-    text(target_pos[0] + " , " + (shoulder_pos[1] - target_pos[1]), 250, 200);
-    text(shoulder_angle * 180.0 / PI + " , " + elbow_angle * 180.0 / PI, 250, 250);
   }
 
   //座標から角度
@@ -123,8 +125,20 @@ public class Arm {
     target_pos = pos;
     if (!ValidTarget()){
       target_pos = buf_target;
+      return;
     }
+    
+    //軌道を作成
+    OrbitPos();
   }
+  
+  //直線軌道を作成
+  private void OrbitPos(){
+    for (int i = 0; i < orbit_step; i++){
+      orbit_pos[i][0] = (target_pos[0] - hand.Pos()[0]) / orbit_step * (i + 1) + hand.Pos()[0];
+      orbit_pos[i][1] = (target_pos[1] - hand.Pos()[1]) / orbit_step * (i + 1) + hand.Pos()[1];
+    }
+  } //<>//
 
   //target_posを取得
   public float[] TargetPos() {
