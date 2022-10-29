@@ -15,6 +15,8 @@ public class Arm {
   private float[] target_pos;
   private int orbit_step;
   private float[][] orbit_pos;
+  private boolean orbit_flag;
+  private int orbit_count;
 
 
   Arm(float shoulder_branch_length_arg, float elbow_branch_length_arg, int joint_size_arg, int[] joint_color_arg, int[] branch_color_arg, int background_color_arg) {
@@ -34,8 +36,10 @@ public class Arm {
     elbow = new Joint(AngleToPosElbow()[0], AngleToPosElbow()[1], joint_size, joint_color, branch_color, hand);
     shoulder = new Joint(shoulder_pos[0], shoulder_pos[1], joint_size, joint_color, branch_color, elbow);
     target_pos = hand.Pos();
-    orbit_step = 10;
+    orbit_step = 40;
     orbit_pos = new float[orbit_step][2];
+    orbit_flag = false;
+    orbit_count = 0;
   }
 
   //描画
@@ -82,8 +86,18 @@ public class Arm {
 
   //位置更新
   public void UpdatePosition() {
+    
+    if (!orbit_flag){
+      orbit_count = 0;
+      return;
+    }
+    
+    if(orbit_count == (orbit_step - 1)){
+      orbit_flag = false;
+    }
+    
     //角度更新
-    PosToAngle();
+    PosToAngle(orbit_pos[orbit_count]);
 
     //位置更新
     hand = new Joint(AngleToPosHand()[0], AngleToPosHand()[1], joint_size, joint_color, branch_color, null);
@@ -95,12 +109,14 @@ public class Arm {
     
     //表示
     Show();
+    
+    orbit_count++;
   }
 
   //座標から角度
-  private void PosToAngle() {
-    float x = target_pos[0];
-    float y = shoulder_pos[1] - target_pos[1];
+  private void PosToAngle(float[] pos) {
+    float x = pos[0];
+    float y = shoulder_pos[1] - pos[1];
     float l1 = shoulder_branch_length;
     float l2 = elbow_branch_length;
 
@@ -111,7 +127,7 @@ public class Arm {
     numerator = y - l1 * sin(shoulder_angle);
     denominator = x - l1 * cos(shoulder_angle);
     float temp_angle = atan(numerator / denominator);
-    if (target_pos[1] > shoulder_pos[1]) {
+    if (pos[1] > shoulder_pos[1]) {
       if (temp_angle > (0 * PI / 180)) {
         temp_angle = -PI + temp_angle;
       }
@@ -122,7 +138,7 @@ public class Arm {
   //target_posに代入
   public void TargetPos(float[] pos) {
     float[] buf_target = target_pos;
-    target_pos = pos;
+    target_pos = pos; //<>//
     if (!ValidTarget()){
       target_pos = buf_target;
       return;
@@ -130,6 +146,7 @@ public class Arm {
     
     //軌道を作成
     OrbitPos();
+    orbit_flag = true;
   }
   
   //直線軌道を作成
@@ -138,7 +155,7 @@ public class Arm {
       orbit_pos[i][0] = (target_pos[0] - hand.Pos()[0]) / orbit_step * (i + 1) + hand.Pos()[0];
       orbit_pos[i][1] = (target_pos[1] - hand.Pos()[1]) / orbit_step * (i + 1) + hand.Pos()[1];
     }
-  } //<>//
+  }
 
   //target_posを取得
   public float[] TargetPos() {

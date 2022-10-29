@@ -32,9 +32,9 @@ void setup() {
 
 void draw() {
   //直線的に目標まで移動
+  robot_arm.UpdatePosition();
 }
 
 void mousePressed(){
   robot_arm.TargetPos(new float[]{mouseX,mouseY});
-  //robot_arm.UpdatePosition();
 }
