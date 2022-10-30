@@ -1,5 +1,10 @@
 Arm robot_arm;
 
+//テスト用フラグ
+boolean target_mode = false;
+boolean orbit_mode = true;
+
+
 void settings(){
    //スクリーン
   int screen_height = 500;
@@ -36,5 +41,12 @@ void draw() {
 }
 
 void mousePressed(){
-  robot_arm.TargetPos(new float[]{mouseX,mouseY});
+  if (target_mode){
+    robot_arm.TargetPos(new float[]{mouseX,mouseY});
+  }
+  
+  if (orbit_mode){
+    //軌道を描く
+  }
+  
 }

@@ -2,6 +2,8 @@ public class Arm {
   Joint hand;
   Joint elbow;
   Joint shoulder;
+  
+  Orbit mouse_orbit;
 
   private float shoulder_branch_length;
   private float elbow_branch_length;
@@ -136,7 +138,7 @@ public class Arm {
   }
 
   //target_posに代入
-  public void TargetPos(float[] pos) {
+  public void TargetPos(float[] pos) { //<>//
     float[] buf_target = target_pos;
     target_pos = pos; //<>//
     if (!ValidTarget()){
