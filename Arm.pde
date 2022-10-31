@@ -17,6 +17,7 @@ public class Arm {
   private float[] target_pos;
   private int orbit_step;
   private float[][] orbit_pos;
+  private boolean target_flag;
   private boolean orbit_flag;
   private int orbit_count;
 
@@ -37,10 +38,11 @@ public class Arm {
     hand = new Joint(AngleToPosHand()[0], AngleToPosHand()[1], joint_size, joint_color, branch_color, null);
     elbow = new Joint(AngleToPosElbow()[0], AngleToPosElbow()[1], joint_size, joint_color, branch_color, hand);
     shoulder = new Joint(shoulder_pos[0], shoulder_pos[1], joint_size, joint_color, branch_color, elbow);
+    mouse_orbit = new Orbit(200);
     target_pos = hand.Pos();
     orbit_step = 40;
     orbit_pos = new float[orbit_step][2];
-    orbit_flag = false;
+    target_flag = false;
     orbit_count = 0;
   }
 
@@ -50,6 +52,7 @@ public class Arm {
     shoulder.Show();
     elbow.Show();
     hand.Show();
+    
   }
 
   //マウスで座標を指定できる範囲を描画
@@ -85,21 +88,39 @@ public class Arm {
     pos[1] = AngleToPosElbow()[1] - elbow_branch_length * sin(shoulder_angle + elbow_angle);
     return pos;
   }
+  
+  public void Update(){
+    UpdatePosition();
+    mouse_orbit.Show();
+  }
 
   //位置更新
-  public void UpdatePosition() {
+  private void UpdatePosition() {
     
-    if (!orbit_flag){
+    if (target_flag){
+      PosToAngle(orbit_pos[orbit_count]);
+    }
+    else if (!orbit_flag && !mouse_orbit.Empty()){
+      if (mouse_orbit.InRange(orbit_count)){
+        PosToAngle(mouse_orbit.GetEachOrbitPos(orbit_count));
+      }
+      else{
+        TargetPos(mouse_orbit.GetEachOrbitPos(orbit_count - 1));
+        MouseOrbitReset();
+        orbit_flag = true;
+      }
+    }
+    else{
       orbit_count = 0;
-      return;
+      PosToAngle(target_pos);
     }
     
     if(orbit_count == (orbit_step - 1)){
-      orbit_flag = false;
+      target_flag = false;
     }
     
     //角度更新
-    PosToAngle(orbit_pos[orbit_count]);
+    
 
     //位置更新
     hand = new Joint(AngleToPosHand()[0], AngleToPosHand()[1], joint_size, joint_color, branch_color, null);
@@ -131,14 +152,14 @@ public class Arm {
     float temp_angle = atan(numerator / denominator);
     if (pos[1] > shoulder_pos[1]) {
       if (temp_angle > (0 * PI / 180)) {
-        temp_angle = -PI + temp_angle;
+        temp_angle = -PI + temp_angle; //<>//
       }
     }
     elbow_angle = temp_angle - shoulder_angle;
   }
 
   //target_posに代入
-  public void TargetPos(float[] pos) { //<>//
+  public void TargetPos(float[] pos) {
     float[] buf_target = target_pos;
     target_pos = pos; //<>//
     if (!ValidTarget()){
@@ -148,7 +169,7 @@ public class Arm {
     
     //軌道を作成
     OrbitPos();
-    orbit_flag = true;
+    //target_flag = true;
   }
   
   //直線軌道を作成
@@ -157,6 +178,25 @@ public class Arm {
       orbit_pos[i][0] = (target_pos[0] - hand.Pos()[0]) / orbit_step * (i + 1) + hand.Pos()[0];
       orbit_pos[i][1] = (target_pos[1] - hand.Pos()[1]) / orbit_step * (i + 1) + hand.Pos()[1];
     }
+  }
+  
+  //マウス軌道作成
+  public void MouseOrbitPos(float[] pos){
+    if (mouse_orbit.Limit()){
+      orbit_flag = false;
+      return;
+    }
+    mouse_orbit.AddOrbitPos(pos);
+    orbit_flag = true;
+  }
+  
+  //マウス軌道追従開始
+  public void MouseOrbitStart(){
+    orbit_flag = false;
+  }
+  
+  private void MouseOrbitReset(){
+    mouse_orbit.Reset();
   }
 
   //target_posを取得
